@@ -1,0 +1,25 @@
+{
+  "$schema": "https://vercel.com/schemas/vercel.json",
+  "buildCommand": "cd cn-storefront && npm run build",
+  "installCommand": "npm install --prefix cn-storefront",
+  "regions": ["iad1"],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
+}
