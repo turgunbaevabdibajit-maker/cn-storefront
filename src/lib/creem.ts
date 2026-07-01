@@ -21,7 +21,7 @@ export async function createCheckout(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${CREEM_API_KEY}`,
+      "x-api-key": CREEM_API_KEY,
     },
     body: JSON.stringify({
       metadata: {
