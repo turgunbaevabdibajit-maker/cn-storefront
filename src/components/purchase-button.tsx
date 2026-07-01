@@ -28,7 +28,7 @@ export default function PurchaseButton({
         if (data.alreadyOwned) {
           toast.info("You already own this course!");
         } else {
-          toast.error(data.error || "Failed to start checkout");
+          toast.error(data.detail || data.error || "Failed to start checkout");
         }
         return;
       }
