@@ -89,8 +89,8 @@ export async function POST(request: Request) {
         `${appUrl}/api/creem/success?order_id=${order.id}`,
         `${appUrl}/products/${product.slug}`
       );
-    } catch (creemError) {
-      console.error("Creem API error:", creemError);
+    } catch (creemError: any) {
+      console.error("Creem API error:", creemError?.message || creemError);
       // Roll back the order
       await (supabase as any)
         .from("orders")
@@ -99,7 +99,8 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         {
-          error: "Payment service temporarily unavailable. Please try again later.",
+          error: "Payment service temporarily unavailable",
+          detail: creemError?.message || "Unknown error",
         },
         { status: 502 }
       );
