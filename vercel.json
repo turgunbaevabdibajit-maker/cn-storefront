@@ -1,7 +1,7 @@
 {
   "$schema": "https://vercel.com/schemas/vercel.json",
-  "buildCommand": "cd cn-storefront && npm run build",
-  "installCommand": "npm install --prefix cn-storefront",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
   "regions": ["iad1"],
   "headers": [
     {

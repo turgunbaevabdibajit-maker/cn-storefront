@@ -26,7 +26,13 @@ type ProductItem = {
   category: string | null;
 };
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string }>;
+}) {
+  const params = await searchParams;
+
   const supabase = await createClient_server();
   const {
     data: { user },
@@ -67,6 +73,11 @@ export default async function DashboardPage() {
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8">
       <h1 className="text-2xl font-bold">Dashboard</h1>
+      {params.success && (
+        <div className="mt-2 rounded-md border border-green-500/50 bg-green-500/10 p-3 text-sm text-green-700">
+          Payment successful! Your download access is being activated. Check back in a moment if it doesn't appear.
+        </div>
+      )}
       <p className="text-muted-foreground">
         Welcome, {profile?.full_name || user.email}. Here you can manage your purchases and download materials.
       </p>

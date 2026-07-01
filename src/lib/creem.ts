@@ -42,8 +42,15 @@ export async function createCheckout(
   });
 
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Creem API error (${response.status}): ${error}`);
+    const errorText = await response.text();
+    console.error(`Creem API error (${response.status}):`, errorText);
+    // Check for common 401 causes
+    if (response.status === 401) {
+      throw new Error(
+        "Creem API error (401): API key may be invalid or missing. Check CREEM_API_KEY in environment variables."
+      );
+    }
+    throw new Error(`Creem API error (${response.status}): ${errorText}`);
   }
 
   return response.json();

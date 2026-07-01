@@ -12,8 +12,10 @@ export default function robots(): MetadataRoute.Robots {
         "/api/",
       ],
     },
-    sitemap: process.env.NEXT_PUBLIC_APP_URL
-      ? `${process.env.NEXT_PUBLIC_APP_URL}/sitemap.xml`
-      : undefined,
+    sitemap: process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}/sitemap.xml`
+      : process.env.NEXT_PUBLIC_APP_URL
+        ? `${process.env.NEXT_PUBLIC_APP_URL}/sitemap.xml`
+        : undefined,
   };
 }

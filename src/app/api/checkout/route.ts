@@ -79,14 +79,31 @@ export async function POST(request: Request) {
 
     // Create Creem checkout
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const checkout = await createCheckout(
-      order.id,
-      product.title,
-      product.price_cents,
-      product.currency || "usd",
-      `${appUrl}/api/creem/success?order_id=${order.id}`,
-      `${appUrl}/products/${product.slug}`
-    );
+    let checkout;
+    try {
+      checkout = await createCheckout(
+        order.id,
+        product.title,
+        product.price_cents,
+        product.currency || "usd",
+        `${appUrl}/api/creem/success?order_id=${order.id}`,
+        `${appUrl}/products/${product.slug}`
+      );
+    } catch (creemError) {
+      console.error("Creem API error:", creemError);
+      // Roll back the order
+      await (supabase as any)
+        .from("orders")
+        .update({ status: "failed" })
+        .eq("id", order.id);
+
+      return NextResponse.json(
+        {
+          error: "Payment service temporarily unavailable. Please try again later.",
+        },
+        { status: 502 }
+      );
+    }
 
     return NextResponse.json({ checkoutUrl: checkout.checkout_url });
   } catch (error) {
